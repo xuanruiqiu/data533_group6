@@ -1,0 +1,41 @@
+from __future__ import annotations
+
+from typing import Union
+
+
+class Ingredient:
+    """Basic ingredient tracking quantity only."""
+
+    def __init__(self, name: str, quantity: float, expiry_date: str, value: float = 0.0) -> None:
+        self.name = name
+        self.quantity = quantity
+        self.expiry_date = expiry_date
+        self.unit_value = (float(value) / quantity) if quantity else 0.0
+
+    def info(self) -> str:
+        return f"{self.name} ({self.quantity})"
+
+    def use(self, amount: Union[int, float]) -> bool:
+        if amount <= 0 or amount > self.quantity:
+            return False
+        self.quantity -= amount
+        return True
+
+    def current_value(self) -> float:
+        return self.unit_value * self.quantity
+
+
+class Spirit(Ingredient):
+    """Spirit placeholder; ABV support to be added later."""
+
+    def __init__(self, name: str, quantity: float, expiry_date: str, abv: float = 0.0, value: float = 0.0) -> None:
+        super().__init__(name, quantity, expiry_date, value=value)
+        self.abv = abv
+
+
+class Mixer(Ingredient):
+    """Mixer placeholder with carbonation flag."""
+
+    def __init__(self, name: str, quantity: float, expiry_date: str, is_carbonated: bool, value: float = 0.0) -> None:
+        super().__init__(name, quantity, expiry_date, value=value)
+        self.is_carbonated = is_carbonated
