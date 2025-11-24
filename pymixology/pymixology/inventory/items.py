@@ -32,6 +32,9 @@ class Spirit(Ingredient):
         super().__init__(name, quantity, expiry_date, value=value)
         self.abv = abv
 
+    def get_abv(self) -> float:
+        return self.abv
+
 
 class Mixer(Ingredient):
     """Mixer placeholder with carbonation flag."""
@@ -39,3 +42,6 @@ class Mixer(Ingredient):
     def __init__(self, name: str, quantity: float, expiry_date: str, is_carbonated: bool, value: float = 0.0) -> None:
         super().__init__(name, quantity, expiry_date, value=value)
         self.is_carbonated = is_carbonated
+
+    def is_fizzy(self) -> bool:
+        return bool(self.is_carbonated)

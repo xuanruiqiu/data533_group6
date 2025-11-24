@@ -28,8 +28,10 @@ def check_stock(inventory_list: List[Ingredient], item_name: str) -> float:
 
 
 def get_shopping_list(inventory_list: List[Ingredient], min_threshold: float) -> List[str]:
-    return []
+    """Names that fall below a minimum threshold."""
+    return [item.name for item in inventory_list if item.quantity < min_threshold]
 
 
 def total_value(inventory_list: List[Ingredient]) -> float:
-    return 0.0
+    """Total estimated value from all items."""
+    return sum(item.current_value() for item in inventory_list)
