@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from typing import List, Dict, Any
 
+_OZ_TO_ML = 29.5735
+
 
 def calculate_abv(ingredients: List[Dict[str, float]]) -> float:
     """Volume-weighted ABV estimate."""
@@ -28,9 +30,9 @@ def unit_converter(amount: float, from_unit: str, to_unit: str) -> float:
     if from_unit == to_unit:
         return amount
     if from_unit == "ml" and to_unit == "oz":
-        return amount / 30
+        return amount / _OZ_TO_ML
     if from_unit == "oz" and to_unit == "ml":
-        return amount * 30
+        return amount * _OZ_TO_ML
     return amount
 
 
