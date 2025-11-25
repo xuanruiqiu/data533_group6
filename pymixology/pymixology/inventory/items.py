@@ -4,7 +4,7 @@ from typing import Union
 
 
 class Ingredient:
-    """Basic ingredient tracking quantity only."""
+    """Basic ingredient tracking quantity with rough value support."""
 
     def __init__(self, name: str, quantity: float, expiry_date: str, value: float = 0.0) -> None:
         self.name = name
@@ -13,7 +13,9 @@ class Ingredient:
         self.unit_value = (float(value) / quantity) if quantity else 0.0
 
     def info(self) -> str:
-        return f"{self.name} ({self.quantity})"
+        value = self.current_value()
+        value_part = f", Value: {value:.2f}" if value else ""
+        return f"{self.name} ({self.quantity}){value_part}"
 
     def use(self, amount: Union[int, float]) -> bool:
         if amount <= 0 or amount > self.quantity:
