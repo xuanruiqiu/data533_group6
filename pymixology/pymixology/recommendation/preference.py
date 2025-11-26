@@ -31,5 +31,8 @@ def get_top_favorites(reviews_db: Any, top_n: int = 3):
         pairs = list(reviews_db.items())
     elif isinstance(reviews_db, list):
         pairs = [(item.get("cocktail"), item.get("rating", 0)) for item in reviews_db]
+    else:
+        raise TypeError("reviews_db must be a list or dict.")
+
     sorted_pairs = sorted(pairs, key=lambda item: item[1], reverse=True)
     return [name for name, _rating in sorted_pairs[:top_n] if name]
