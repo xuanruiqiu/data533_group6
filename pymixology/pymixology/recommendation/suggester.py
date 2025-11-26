@@ -17,12 +17,17 @@ def _normalize_ingredient(item: Any) -> Dict[str, Any]:
     return {"name": str(item), "amount": None, "unit": None}
 
 
+def _ingredient_name(item: Any) -> str:
+    """Extract normalized ingredient name."""
+    return _normalize_ingredient(item).get("name", "")
+
+
 def get_makeable_cocktails(inventory_list: List[Ingredient], recipe_db: Iterable[Dict[str, Any]]) -> List[str]:
     """Recommend cocktails whose ingredient names are present in inventory (quantity ignored)."""
     inventory_names = {item.name.lower() for item in inventory_list}
     ready = []
     for recipe in recipe_db:
-        ingredients = {_normalize_ingredient(item).get("name", "").lower() for item in recipe.get("ingredients", [])}
+        ingredients = {_ingredient_name(item).lower() for item in recipe.get("ingredients", [])}
         if ingredients and ingredients.issubset(inventory_names):
             ready.append(recipe.get("name", ""))
     return ready
@@ -33,7 +38,7 @@ def find_cocktails_with_ingredients(target_ingredients: List[str], recipe_db: It
     targets = {item.lower() for item in target_ingredients}
     matches = []
     for recipe in recipe_db:
-        ingredients = {_normalize_ingredient(item).get("name", "").lower() for item in recipe.get("ingredients", [])}
+        ingredients = {_ingredient_name(item).lower() for item in recipe.get("ingredients", [])}
         if ingredients & targets:
             matches.append(recipe.get("name", ""))
     return matches
