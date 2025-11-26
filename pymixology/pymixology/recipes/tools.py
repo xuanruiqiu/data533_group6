@@ -19,6 +19,8 @@ def estimate_cost(ingredients: List[Dict[str, float]]) -> float:
     cost = 0.0
     for item in ingredients:
         bottle_vol = item.get("bottle_vol", 0) or 1
+        if bottle_vol <= 0:
+            raise ValueError("Bottle volume must be greater than zero.")
         price_per_bottle = item.get("price_per_bottle", 0)
         used_vol = item.get("used_vol", 0)
         cost += (price_per_bottle / bottle_vol) * used_vol
@@ -33,13 +35,13 @@ def unit_converter(amount: float, from_unit: str, to_unit: str) -> float:
         return amount / _OZ_TO_ML
     if from_unit == "oz" and to_unit == "ml":
         return amount * _OZ_TO_ML
-    return amount
+    raise ValueError("Unsupported unit conversion.")
 
 
 def scale_recipe(cocktail_dict: Dict[str, Any], servings: int) -> Dict[str, Any]:
     """Scale each numeric ingredient amount by the servings factor."""
     if servings <= 0:
-        return cocktail_dict
+        raise ValueError("Servings must be positive.")
     factor = servings / (cocktail_dict.get("servings", 1) or 1)
     new_recipe = dict(cocktail_dict)
     scaled = []

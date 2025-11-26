@@ -70,6 +70,10 @@ def _format_ingredient(ingredient: Dict[str, Any]) -> str:
     unit = ingredient.get("unit")
     if amount is None:
         return name
+    if isinstance(amount, (int, float)):
+        amount_str = f"{amount:.2f}".rstrip("0").rstrip(".")
+    else:
+        amount_str = str(amount)
     if unit:
-        return f"{amount} {unit} {name}"
-    return f"{amount} {name}"
+        return f"{amount_str} {unit} {name}"
+    return f"{amount_str} {name}"
