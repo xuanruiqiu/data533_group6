@@ -15,7 +15,7 @@ class Ingredient:
     def info(self) -> str:
         value = self.current_value()
         value_part = f", Value: {value:.2f}" if value else ""
-        return f"{self.name} ({self.quantity}){value_part}"
+        return f"{self.name} ({self.quantity}) exp:{self.expiry_date}{value_part}"
 
     def use(self, amount: Union[int, float]) -> bool:
         if amount <= 0 or amount > self.quantity:
