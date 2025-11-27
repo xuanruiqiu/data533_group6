@@ -18,6 +18,8 @@ class Ingredient:
         return f"{self.name} ({self.quantity}) exp:{self.expiry_date}{value_part}"
 
     def use(self, amount: Union[int, float]) -> bool:
+        if not isinstance(amount, (int, float)):
+            return False
         if amount <= 0 or amount > self.quantity:
             return False
         self.quantity -= amount
