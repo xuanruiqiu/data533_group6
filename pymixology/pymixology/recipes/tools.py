@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 from typing import List, Dict, Any
 
 _OZ_TO_ML = 29.5735
@@ -43,17 +44,14 @@ def scale_recipe(cocktail_dict: Dict[str, Any], servings: int) -> Dict[str, Any]
     if servings <= 0:
         raise ValueError("Servings must be positive.")
     factor = servings / (cocktail_dict.get("servings", 1) or 1)
-    new_recipe = dict(cocktail_dict)
+    new_recipe = copy.deepcopy(cocktail_dict)
     scaled = []
-    for ingredient in cocktail_dict.get("ingredients", []):
+    for ingredient in new_recipe.get("ingredients", []):
         if isinstance(ingredient, dict) and "amount" in ingredient:
-            entry = ingredient.copy()
-            amount = entry.get("amount")
+            amount = ingredient.get("amount")
             if isinstance(amount, (int, float)):
-                entry["amount"] = amount * factor
-            scaled.append(entry)
-        else:
-            scaled.append(ingredient)
+                ingredient["amount"] = amount * factor
+        scaled.append(ingredient)
     new_recipe["ingredients"] = scaled
     new_recipe["servings"] = servings
     return new_recipe
