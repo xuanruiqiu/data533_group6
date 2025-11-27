@@ -57,5 +57,8 @@ def recommend_by_flavor(user_profile: Dict[str, int], recipe_db: Iterable[Dict[s
 
 
 def surprise_me(recipe_db: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
+    """Return a random cocktail dict or raise when none exist."""
     recipes = list(recipe_db)
-    return random.choice(recipes) if recipes else {}
+    if not recipes:
+        raise ValueError("No recipes available.")
+    return random.choice(recipes)
