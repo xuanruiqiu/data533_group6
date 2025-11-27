@@ -20,6 +20,8 @@ def load_recipes(filepath: str) -> List[Dict[str, Any]]:
 def search_cocktail(recipe_db: List[Dict[str, Any]], name: str) -> List[Dict[str, Any]]:
     """Case-insensitive substring search across cocktail names."""
     query = name.lower().strip()
+    if not query:
+        return []
     return [recipe for recipe in recipe_db if query in str(recipe.get("name", "")).lower()]
 
 
