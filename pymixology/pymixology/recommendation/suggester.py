@@ -72,7 +72,7 @@ def recommend_by_flavor(user_profile: Dict[str, int], recipe_db: Iterable[Dict[s
         score = user_profile.get(key, 0)
         if score > 0:
             ranked.append((score, recipe.get("name", "")))
-    ranked.sort(reverse=True, key=lambda item: item[0])
+    ranked.sort(key=lambda item: (-item[0], item[1]))
     return [name for _score, name in ranked]
 
 
