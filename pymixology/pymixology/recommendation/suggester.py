@@ -27,8 +27,20 @@ def get_makeable_cocktails(inventory_list: List[Ingredient], recipe_db: Iterable
     inventory_names = {item.name.lower() for item in inventory_list}
     ready = []
     for recipe in recipe_db:
-        ingredients = {_ingredient_name(item).lower() for item in recipe.get("ingredients", [])}
-        if ingredients and ingredients.issubset(inventory_names):
+        normalized_ingredients = [_normalize_ingredient(item) for item in recipe.get("ingredients", [])]
+        if not normalized_ingredients:
+            continue
+        can_make = True
+        for ingredient in normalized_ingredients:
+            name = ingredient.get("name", "").lower()
+            if name not in inventory_names:
+                can_make = False
+                break
+            inventory_match = next((item for item in inventory_list if item.name.lower() == name), None)
+            if inventory_match and not _has_required_amount(ingredient, inventory_match):
+                can_make = False
+                break
+        if can_make:
             ready.append(recipe.get("name", ""))
     return ready
 
@@ -42,6 +54,14 @@ def find_cocktails_with_ingredients(target_ingredients: List[str], recipe_db: It
         if ingredients & targets:
             matches.append(recipe.get("name", ""))
     return matches
+
+
+def _has_required_amount(required: Dict[str, Any], inventory_item: Ingredient) -> bool:
+    """Check whether inventory quantity satisfies recipe requirement (when provided)."""
+    required_amount = required.get("amount")
+    if isinstance(required_amount, (int, float)) and required_amount > 0:
+        return inventory_item.quantity >= required_amount
+    return True
 
 
 def recommend_by_flavor(user_profile: Dict[str, int], recipe_db: Iterable[Dict[str, Any]]) -> List[str]:
