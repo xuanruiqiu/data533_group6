@@ -9,6 +9,8 @@ def add_item(inventory_list: List[Ingredient], item_object: Ingredient) -> bool:
     """Append an Ingredient subclass to the list."""
     if not isinstance(item_object, Ingredient):
         raise TypeError("item_object must be an Ingredient.")
+    if any(item.name.lower() == item_object.name.lower() for item in inventory_list):
+        return False
     inventory_list.append(item_object)
     return True
 
