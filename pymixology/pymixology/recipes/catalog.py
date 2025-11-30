@@ -13,7 +13,7 @@ def load_recipes(filepath: str) -> List[Dict[str, Any]]:
     with path.open("r", encoding="utf-8") as f:
         data = json.load(f)
     if not isinstance(data, list):
-        return []
+        raise ValueError("Recipe data must be a list of dicts.")
     return [_normalize_recipe(recipe) for recipe in data]
 
 
