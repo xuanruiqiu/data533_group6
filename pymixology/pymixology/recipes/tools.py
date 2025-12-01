@@ -8,10 +8,10 @@ _OZ_TO_ML = 29.5735
 
 def calculate_abv(ingredients: List[Dict[str, float]]) -> float:
     """Volume-weighted ABV estimate."""
-    total_volume = sum(item.get("vol", 0) for item in ingredients)
+    total_volume = sum(max(0, item.get("vol", 0)) for item in ingredients)
     if total_volume <= 0:
         return 0.0
-    weighted_abv = sum(item.get("vol", 0) * item.get("abv", 0) for item in ingredients)
+    weighted_abv = sum(max(0, item.get("vol", 0)) * item.get("abv", 0) for item in ingredients)
     return weighted_abv / total_volume
 
 

@@ -51,11 +51,11 @@ def _normalize_ingredient(ingredient: Any) -> Dict[str, Any]:
     """Ensure each ingredient is a dict with consistent keys."""
     if isinstance(ingredient, dict):
         return {
-            "name": ingredient.get("name", ""),
+            "name": str(ingredient.get("name", "")),
             "amount": ingredient.get("amount"),
             "unit": ingredient.get("unit"),
         }
-    return {"name": ingredient, "amount": None, "unit": None}
+    return {"name": str(ingredient), "amount": None, "unit": None}
 
 
 def _normalize_recipe(recipe: Dict[str, Any]) -> Dict[str, Any]:
