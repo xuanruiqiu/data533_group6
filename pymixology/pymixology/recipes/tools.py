@@ -1,3 +1,5 @@
+"""Utility helpers for recipe math and conversions (release candidate)."""
+
 from __future__ import annotations
 
 import copy
@@ -47,7 +49,8 @@ def scale_recipe(cocktail_dict: Dict[str, Any], servings: int) -> Dict[str, Any]
     """Scale each numeric ingredient amount by the servings factor."""
     if servings <= 0:
         raise ValueError("Servings must be positive.")
-    factor = servings / (cocktail_dict.get("servings", 1) or 1)
+    current_servings = cocktail_dict.get("servings", 1) or 1
+    factor = servings / current_servings
     new_recipe = copy.deepcopy(cocktail_dict)
     scaled = []
     for ingredient in new_recipe.get("ingredients", []):

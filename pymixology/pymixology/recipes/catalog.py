@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Iterable, List, Dict, Any
 
 
 def load_recipes(filepath: str) -> List[Dict[str, Any]]:
@@ -17,7 +17,7 @@ def load_recipes(filepath: str) -> List[Dict[str, Any]]:
     return [_normalize_recipe(recipe) for recipe in data]
 
 
-def search_cocktail(recipe_db: List[Dict[str, Any]], name: str) -> List[Dict[str, Any]]:
+def search_cocktail(recipe_db: Iterable[Dict[str, Any]], name: str) -> List[Dict[str, Any]]:
     """Case-insensitive substring search across cocktail names."""
     query = name.lower().strip()
     if not query:
@@ -25,7 +25,7 @@ def search_cocktail(recipe_db: List[Dict[str, Any]], name: str) -> List[Dict[str
     return [recipe for recipe in recipe_db if query in str(recipe.get("name", "")).lower()]
 
 
-def filter_by_base(recipe_db: List[Dict[str, Any]], base_spirit: str) -> List[Dict[str, Any]]:
+def filter_by_base(recipe_db: Iterable[Dict[str, Any]], base_spirit: str) -> List[Dict[str, Any]]:
     """Return recipes that exactly match a base spirit (case-insensitive)."""
     target = base_spirit.lower().strip()
     return [recipe for recipe in recipe_db if str(recipe.get("base", "")).lower() == target]
