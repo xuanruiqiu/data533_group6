@@ -24,6 +24,8 @@ def estimate_cost(ingredients: List[Dict[str, float]]) -> float:
             raise ValueError("Bottle volume must be greater than zero.")
         price_per_bottle = item.get("price_per_bottle", 0)
         used_vol = item.get("used_vol", 0)
+        if used_vol < 0:
+            raise ValueError("Used volume must be non-negative.")
         cost += (price_per_bottle / bottle_vol) * used_vol
     return cost
 
