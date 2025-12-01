@@ -26,6 +26,8 @@ def record_review(reviews_db: Any, cocktail_name: str, rating: int):
 
 def get_top_favorites(reviews_db: Any, top_n: int = 3):
     """Return top-rated cocktail names."""
+    if top_n <= 0:
+        return []
     pairs = []
     if isinstance(reviews_db, dict):
         pairs = list(reviews_db.items())
