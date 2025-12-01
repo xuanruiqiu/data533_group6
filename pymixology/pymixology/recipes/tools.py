@@ -30,11 +30,13 @@ def estimate_cost(ingredients: List[Dict[str, float]]) -> float:
 
 def unit_converter(amount: float, from_unit: str, to_unit: str) -> float:
     """Convert ml<->oz with a coarse factor."""
-    if from_unit == to_unit:
+    f_unit = from_unit.lower()
+    t_unit = to_unit.lower()
+    if f_unit == t_unit:
         return amount
-    if from_unit == "ml" and to_unit == "oz":
+    if f_unit == "ml" and t_unit == "oz":
         return amount / _OZ_TO_ML
-    if from_unit == "oz" and to_unit == "ml":
+    if f_unit == "oz" and t_unit == "ml":
         return amount * _OZ_TO_ML
     raise ValueError("Unsupported unit conversion.")
 
