@@ -17,6 +17,9 @@ class Ingredient:
         value_part = f", Value: {value:.2f}" if value else ""
         return f"{self.name} ({self.quantity}) exp:{self.expiry_date}{value_part}"
 
+    def __repr__(self) -> str:
+        return f"Ingredient({self.info()})"
+
     def use(self, amount: Union[int, float]) -> bool:
         if not isinstance(amount, (int, float)):
             return False
