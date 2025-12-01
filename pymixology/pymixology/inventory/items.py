@@ -1,10 +1,12 @@
+"""Inventory item classes with simple inheritance."""
+
 from __future__ import annotations
 
 from typing import Union
 
 
 class Ingredient:
-    """Basic ingredient tracking quantity with rough value support."""
+    """Generic ingredient with quantity and value tracking."""
 
     def __init__(self, name: str, quantity: float, expiry_date: str, value: float = 0.0) -> None:
         self.name = name
@@ -33,7 +35,7 @@ class Ingredient:
 
 
 class Spirit(Ingredient):
-    """Spirit placeholder; ABV support to be added later."""
+    """Alcoholic ingredient with ABV."""
 
     def __init__(self, name: str, quantity: float, expiry_date: str, abv: float = 0.0, value: float = 0.0) -> None:
         super().__init__(name, quantity, expiry_date, value=value)
@@ -47,7 +49,7 @@ class Spirit(Ingredient):
 
 
 class Mixer(Ingredient):
-    """Mixer placeholder with carbonation flag."""
+    """Non-spirit ingredient that may be carbonated."""
 
     def __init__(self, name: str, quantity: float, expiry_date: str, is_carbonated: bool, value: float = 0.0) -> None:
         super().__init__(name, quantity, expiry_date, value=value)
