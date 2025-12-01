@@ -1,3 +1,5 @@
+"""Helpers for managing an inventory list of ingredients."""
+
 from __future__ import annotations
 
 from typing import List
@@ -6,16 +8,15 @@ from .items import Ingredient
 
 
 def add_item(inventory_list: List[Ingredient], item_object: Ingredient) -> bool:
-    """Append an Ingredient subclass to the list."""
+    """Append a new Spirit or Mixer to the inventory."""
     if not isinstance(item_object, Ingredient):
         raise TypeError("item_object must be an Ingredient.")
-    if any(item.name.lower() == item_object.name.lower() for item in inventory_list):
-        return False
     inventory_list.append(item_object)
     return True
 
 
 def remove_item(inventory_list: List[Ingredient], item_name: str) -> bool:
+    """Remove the first matching item by name."""
     target = item_name.lower().strip()
     for idx, item in enumerate(inventory_list):
         if item.name.lower() == target:
@@ -25,6 +26,7 @@ def remove_item(inventory_list: List[Ingredient], item_name: str) -> bool:
 
 
 def check_stock(inventory_list: List[Ingredient], item_name: str) -> float:
+    """Return current quantity for an item, or 0 when missing."""
     target = item_name.lower().strip()
     for item in inventory_list:
         if item.name.lower() == target:
@@ -33,10 +35,10 @@ def check_stock(inventory_list: List[Ingredient], item_name: str) -> float:
 
 
 def get_shopping_list(inventory_list: List[Ingredient], min_threshold: float) -> List[str]:
-    """Names that fall below a minimum threshold."""
-    return sorted([item.name for item in inventory_list if item.quantity < min_threshold])
+    """List names that fall below the provided threshold."""
+    return [item.name for item in inventory_list if item.quantity < min_threshold]
 
 
 def total_value(inventory_list: List[Ingredient]) -> float:
-    """Total estimated value from all items."""
+    """Return the total estimated value of all inventory items."""
     return sum(item.current_value() for item in inventory_list)
