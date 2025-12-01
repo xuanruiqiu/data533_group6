@@ -42,6 +42,9 @@ class Spirit(Ingredient):
     def get_abv(self) -> float:
         return self.abv
 
+    def __repr__(self) -> str:
+        return f"Spirit({self.info()}, abv={self.abv})"
+
 
 class Mixer(Ingredient):
     """Mixer placeholder with carbonation flag."""
@@ -52,3 +55,6 @@ class Mixer(Ingredient):
 
     def is_fizzy(self) -> bool:
         return bool(self.is_carbonated)
+
+    def __repr__(self) -> str:
+        return f"Mixer({self.info()}, fizzy={self.is_carbonated})"
