@@ -1,3 +1,5 @@
+"""Recommendation helpers using recipes and inventory data (release candidate)."""
+
 from __future__ import annotations
 
 import random
