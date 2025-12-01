@@ -1,3 +1,5 @@
+"""Recipe catalog utilities for loading and querying cocktails."""
+
 from __future__ import annotations
 
 import json
@@ -6,10 +8,8 @@ from typing import Iterable, List, Dict, Any
 
 
 def load_recipes(filepath: str) -> List[Dict[str, Any]]:
-    """Load recipes from JSON if file exists; otherwise return an empty list."""
+    """Load recipe data from a JSON file into a list of dicts."""
     path = Path(filepath)
-    if not path.exists():
-        return []
     with path.open("r", encoding="utf-8") as f:
         data = json.load(f)
     if not isinstance(data, list):
@@ -18,37 +18,39 @@ def load_recipes(filepath: str) -> List[Dict[str, Any]]:
 
 
 def search_cocktail(recipe_db: Iterable[Dict[str, Any]], name: str) -> List[Dict[str, Any]]:
-    """Case-insensitive substring search across cocktail names."""
+    """Find cocktails whose names contain the given query (case-insensitive)."""
     query = name.lower().strip()
-    if not query:
-        return []
-    return [recipe for recipe in recipe_db if query in str(recipe.get("name", "")).lower()]
+    results: List[Dict[str, Any]] = []
+    for recipe in recipe_db:
+        cocktail_name = str(recipe.get("name", "")).lower()
+        if query in cocktail_name:
+            results.append(recipe)
+    return results
 
 
 def filter_by_base(recipe_db: Iterable[Dict[str, Any]], base_spirit: str) -> List[Dict[str, Any]]:
-    """Return recipes that exactly match a base spirit (case-insensitive)."""
+    """Filter cocktails by base spirit (case-insensitive exact match)."""
     target = base_spirit.lower().strip()
     return [recipe for recipe in recipe_db if str(recipe.get("base", "")).lower() == target]
 
 
 def display_recipe(cocktail_dict: Dict[str, Any]) -> None:
-    """Print a simple recipe summary."""
-    name = cocktail_dict.get("name", "Unknown")
+    """Print a formatted recipe summary."""
+    name = cocktail_dict.get("name", "Unknown Cocktail")
     ingredients = [_normalize_ingredient(item) for item in cocktail_dict.get("ingredients", [])]
     steps = cocktail_dict.get("steps", [])
+
     print(f"Recipe: {name}")
-    if ingredients:
-        print("Ingredients:")
-        for item in ingredients:
-            print("-", _format_ingredient(item))
-    if steps:
-        print("Steps:")
-        for i, step in enumerate(steps, start=1):
-            print(f"{i}. {step}")
+    print("Ingredients:")
+    for item in ingredients:
+        print(f"- {_format_ingredient(item)}")
+    print("Steps:")
+    for i, step in enumerate(steps, start=1):
+        print(f"{i}. {step}")
 
 
 def _normalize_ingredient(ingredient: Any) -> Dict[str, Any]:
-    """Ensure each ingredient is a dict with consistent keys."""
+    """Ensure an ingredient entry is a consistently shaped dict."""
     if isinstance(ingredient, dict):
         return {
             "name": str(ingredient.get("name", "")),
@@ -66,7 +68,7 @@ def _normalize_recipe(recipe: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _format_ingredient(ingredient: Dict[str, Any]) -> str:
-    """Render an ingredient dict into a friendly string."""
+    """Render an ingredient dict into a human-friendly string."""
     name = ingredient.get("name", "Unknown ingredient")
     amount = ingredient.get("amount")
     unit = ingredient.get("unit")
