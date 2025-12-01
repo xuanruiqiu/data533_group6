@@ -24,7 +24,7 @@ def _ingredient_name(item: Any) -> str:
 
 def get_makeable_cocktails(inventory_list: List[Ingredient], recipe_db: Iterable[Dict[str, Any]]) -> List[str]:
     """Recommend cocktails whose ingredient names are present in inventory (quantity ignored)."""
-    inventory_names = {item.name.lower() for item in inventory_list}
+    inventory_lookup = {item.name.lower(): item for item in inventory_list}
     ready = []
     for recipe in recipe_db:
         normalized_ingredients = [_normalize_ingredient(item) for item in recipe.get("ingredients", [])]
@@ -33,11 +33,11 @@ def get_makeable_cocktails(inventory_list: List[Ingredient], recipe_db: Iterable
         can_make = True
         for ingredient in normalized_ingredients:
             name = ingredient.get("name", "").lower()
-            if name not in inventory_names:
+            inventory_match = inventory_lookup.get(name)
+            if not inventory_match:
                 can_make = False
                 break
-            inventory_match = next((item for item in inventory_list if item.name.lower() == name), None)
-            if inventory_match and not _has_required_amount(ingredient, inventory_match):
+            if not _has_required_amount(ingredient, inventory_match):
                 can_make = False
                 break
         if can_make:
